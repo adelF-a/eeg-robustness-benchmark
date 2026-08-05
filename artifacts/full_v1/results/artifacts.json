@@ -1,0 +1,25 @@
+{
+  "config_hash": "4acfb870cf9b",
+  "artifacts": {
+    "predictions_csp.csv": {
+      "stage": "train_csp",
+      "created": "2026-07-28T16:42:51.508391+00:00"
+    },
+    "csp_models": {
+      "stage": "train_csp",
+      "created": "2026-07-28T16:42:51.508869+00:00"
+    },
+    "csp_artifacts": {
+      "stage": "train_csp",
+      "created": "2026-07-28T16:42:51.509526+00:00"
+    },
+    "predictions_cnn.csv": {
+      "stage": "train_cnn",
+      "created": "2026-07-28T17:20:02.156255+00:00"
+    },
+    "cnn_checkpoints": {
+      "stage": "train_cnn",
+      "created": "2026-07-28T17:20:02.156909+00:00"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+subject,run,reason
+88,4,unexpected sfreq 128.0 (expected 160.0)
+88,8,unexpected sfreq 128.0 (expected 160.0)
+88,12,unexpected sfreq 128.0 (expected 160.0)
+92,4,unexpected sfreq 128.0 (expected 160.0)
+92,8,unexpected sfreq 128.0 (expected 160.0)
+92,12,unexpected sfreq 128.0 (expected 160.0)
+100,4,unexpected sfreq 128.0 (expected 160.0)
+100,8,unexpected sfreq 128.0 (expected 160.0)
+100,12,unexpected sfreq 128.0 (expected 160.0)

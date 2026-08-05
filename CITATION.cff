@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "Explainable and Robust EEG Motor-Imagery Benchmark"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Farfar
+    given-names: Adel
+version: 0.1.0
+date-released: 2026-08-05
+license: MIT
+keywords:
+  - EEG
+  - brain-computer-interface
+  - motor-imagery
+  - CSP
+  - EEGNet
+  - robustness
+  - explainability
+references:
+  - type: data
+    title: "EEG Motor Movement/Imagery Dataset (EEGMMIDB)"
+    authors:
+      - name: "Schalk, G. et al. (BCI2000)"
+    url: "https://physionet.org/content/eegmmidb/1.0.0/"
+    notes: "PhysioNet; accessed via MNE eegbci loader."

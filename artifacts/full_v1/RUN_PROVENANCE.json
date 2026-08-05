@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "experiment": "full_v1",
+  "status": "completed_and_artifact_audited",
+  "execution_date": "2026-07-28",
+  "execution": {
+    "service": "Kaggle",
+    "notebook": "adelfarfarann/notebook7c1043425b",
+    "notebook_url": "https://www.kaggle.com/code/adelfarfarann/notebook7c1043425b",
+    "accelerator": "Tesla T4"
+  },
+  "identity": {
+    "config_hash": "4acfb870cf9b",
+    "runtime_source_archive_sha256": "ab79422a52bee848cf0220cd57f098e14cb96234178ef7bb6e51195db625c567",
+    "downloaded_artifact_archive_sha256": "6a39c4088a5ce828ffd00ee45f166576347d5467d3e9913c91de8979e1003012"
+  },
+  "cohort": {
+    "requested_subjects": 109,
+    "validated_subjects": 106,
+    "excluded_subjects": [88, 92, 100],
+    "epochs": 4748,
+    "left_epochs": 2396,
+    "right_epochs": 2352,
+    "rejected_epochs": 20
+  },
+  "protocol": {
+    "outer_subject_folds": 5,
+    "inner_subject_folds": 3,
+    "cnn_seeds_per_outer_fold": 5,
+    "bootstrap_replicates": 1000
+  },
+  "runtime_environment": {
+    "python": "3.12.13",
+    "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+    "numpy": "2.0.2",
+    "scipy": "1.16.3",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.6.1",
+    "mne": "1.12.1",
+    "torch": "2.10.0+cu128",
+    "matplotlib": "3.10.0",
+    "device": "cuda"
+  },
+  "artifact_audit": {
+    "outer_split_files": 5,
+    "csp_inner_cv_rows": 1080,
+    "csp_models": 5,
+    "cnn_checkpoints": 25,
+    "prediction_rows": 28488,
+    "robustness_rows": 22260,
+    "integrated_gradient_tensors": 25,
+    "importance_rows": 1920,
+    "stability_rows": 1335,
+    "numeric_values_finite": true,
+    "saved_metrics_recomputed_exactly": true
+  },
+  "headline_balanced_accuracy": {
+    "cnn_mean": 0.6167643267315129,
+    "csp_mean": 0.5812740376932337,
+    "paired_mean_difference": 0.03549028903827919,
+    "paired_ci_low": 0.021441596284833563,
+    "paired_ci_high": 0.05125610541871307,
+    "subjects": 106
+  },
+  "report_regeneration": {
+    "date": "2026-08-05",
+    "inputs": "frozen full_v1 CSV and JSON artifacts",
+    "model_training_rerun": false,
+    "changes": [
+      "conditional paired-CI interpretation",
+      "bounded class-count figure width",
+      "model-specific explanation-estimand labels",
+      "explicit cross-device latency caveat"
+    ]
+  },
+  "source_relation_note": "The release commit contains post-run reporting and documentation corrections and is not byte-identical to the source archive used for training."
+}

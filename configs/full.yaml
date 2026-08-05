@@ -1,0 +1,77 @@
+# Reviewed full V1 profile: 109 subjects requested, 106 validation-eligible.
+# Executed on Kaggle/Tesla T4 on 2026-07-28; config identity 4acfb870cf9b.
+# Changing any value below defines a new experiment and must not overwrite V1.
+name: full
+
+paths:
+  data_dir: data
+  results_dir: results
+  reports_dir: reports
+
+data:
+  # 1..109; subjects failing validation are excluded and logged in results/data_validation.csv.
+  subjects: "1-109"
+  runs: [4, 8, 12]
+  sfreq_expected: 160.0
+  n_channels_expected: 64
+
+preprocessing:
+  l_freq: 7.0
+  h_freq: 30.0
+  reference: average
+  tmin: 1.0
+  tmax: 4.0
+  baseline: null
+  reject_criteria: null
+  cache: true
+
+splits:
+  outer_folds: 5
+  inner_folds: 3
+  seed: 20260718
+  method: stratified_group_kfold
+
+csp:
+  # V1 boundary note: C=10 was selected in all five folds and n_components=8 in three.
+  # A wider search belongs to a separately versioned V2, not a retrospective V1 edit.
+  n_components_grid: [2, 4, 6, 8]
+  reg_grid: [null, 0.1, "ledoit_wolf"]
+  C_grid: [0.1, 1.0, 10.0]
+  class_weight_grid: [null, "balanced"]
+
+neural:
+  seeds: [0, 1, 2, 3, 4]
+  epochs: 100
+  batch_size: 64
+  lr: 0.001
+  weight_decay: 0.0001
+  dropout: 0.25
+  F1: 8
+  D: 2
+  kernel_length: 64
+  patience: 15
+  early_stopping_metric: balanced_accuracy
+
+robustness:
+  random_fractions: [0.1, 0.25, 0.5]
+  n_random_masks: 10
+  regions: [frontal, central, left, right]
+  imputation: train_channel_mean
+
+explanations:
+  n_examples_per_subject: 8
+  ig_baseline: zeros
+  ig_steps: 50
+  top_k: 8
+  noise_std: 0.05
+  n_bootstrap_explain: 50
+
+bootstrap:
+  n_boot: 1000
+  ci: 0.95
+  seed: 12345
+
+latency:
+  n_warmup: 10
+  n_repeats: 200
+  batch_size: 1

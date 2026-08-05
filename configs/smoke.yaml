@@ -1,0 +1,76 @@
+# Smoke profile: fast, minimal, for CI-adjacent local verification and a small real-data run.
+# NOT a scientific result — too few subjects/seeds. Use configs/full.yaml for the benchmark.
+name: smoke
+
+paths:
+  data_dir: data
+  # Fresh, isolated smoke outputs. NOT `results/` (the full profile) and NOT the legacy
+  # `results_smoke/` directory (kept as historical evidence, never re-claimed). Identity
+  # hashing also prevents any cross-profile mixing.
+  results_dir: results_smoke_active
+  reports_dir: reports_smoke_active
+
+data:
+  subjects: [1, 2, 3, 4, 5]
+  runs: [4, 8, 12]          # left-vs-right hand motor-imagery runs only
+  sfreq_expected: 160.0
+  n_channels_expected: 64
+
+preprocessing:
+  l_freq: 7.0
+  h_freq: 30.0
+  reference: average         # common-average reference
+  tmin: 1.0                  # seconds post-cue
+  tmax: 4.0
+  baseline: null             # no baseline correction
+  reject_criteria: null      # optional peak-to-peak amplitude threshold (volts), null = off
+  cache: true
+
+splits:
+  outer_folds: 2
+  inner_folds: 2
+  seed: 20260718
+  method: stratified_group_kfold
+
+csp:
+  n_components_grid: [2, 4]
+  reg_grid: [null, "ledoit_wolf"]
+  C_grid: [0.1, 1.0]
+  class_weight_grid: [null, "balanced"]
+
+neural:
+  seeds: [0]
+  epochs: 3
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  dropout: 0.25
+  F1: 8
+  D: 2
+  kernel_length: 64
+  patience: 5                # early-stopping patience (epochs)
+  early_stopping_metric: balanced_accuracy
+
+robustness:
+  random_fractions: [0.1, 0.25, 0.5]
+  n_random_masks: 2
+  regions: [frontal, central, left, right]
+  imputation: train_channel_mean
+
+explanations:
+  n_examples_per_subject: 4
+  ig_baseline: zeros
+  ig_steps: 16
+  top_k: 8
+  noise_std: 0.05
+  n_bootstrap_explain: 5
+
+bootstrap:
+  n_boot: 200
+  ci: 0.95
+  seed: 12345
+
+latency:
+  n_warmup: 3
+  n_repeats: 30
+  batch_size: 1

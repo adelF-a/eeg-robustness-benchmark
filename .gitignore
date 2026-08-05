@@ -1,0 +1,36 @@
+# Data — never commit raw EDF or large derived artifacts
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+*.edf
+*.edf.event
+*.fif
+
+# Generated runs are local working state. Reviewed evidence is curated under artifacts/.
+/results*/
+/reports*/
+*.ckpt
+*.log
+/eeg-benchmark-kaggle.zip
+/.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.env
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.DS_Store
