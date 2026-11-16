@@ -1,31 +1,30 @@
-# EEG Motor-Imagery Robustness Benchmark — Methods and Reproduction
+# EEG Motor-Imagery Classification Benchmark — Methods and Reproduction
 
 [Back to the project overview](../README.md)
 
 Run the commands in this document from the repository root.
 
-Explainable and robust EEG motor-imagery classification: **CSP + logistic regression**
-vs a **compact EEGNet-like CNN**, evaluated on *previously unseen subjects*, stress-tested
-under *missing EEG channels*, and analysed for *channel-level explanation stability*.
+This document specifies the comparison of **CSP + logistic regression** with a
+**compact EEGNet-like CNN** for imagined left- versus right-fist movement. Accuracy on
+unseen participants, sensitivity to missing channels, and explanation stability are
+measured separately; robustness and reliable explanations are not assumed.
 
 > This is a research/methods benchmark. **No clinical claims are made.**
 
 ## 1. Research question
 
-> Does a compact neural EEG classifier outperform a CSP + logistic-regression baseline on
-> previously unseen subjects, and how robust and explainable are both models when EEG
-> channels are missing?
+Does a compact CNN outperform CSP + logistic regression on previously unseen participants?
+How much does channel loss reduce accuracy, and how stable are channel-level explanations?
 
 We compare the two models on (a) generalisation to unseen subjects, (b) robustness to
 channel dropout at test time, and (c) the stability of their channel-level explanations.
 
-## 2. Why random epoch splitting leaks subjects
+## 2. Why evaluation holds out whole participants
 
-EEG epochs from the same person are highly correlated: skull anatomy, electrode placement,
-impedance, and session state produce a strong per-subject "fingerprint". If epochs are split
-randomly, epochs of the *same* subject land in both train and test, so a classifier can score
-well by recognising the subject rather than the mental task. The reported accuracy then
-overstates how well the model generalises to a **new** person.
+A random trial split can put recordings from the same participant in both training and
+test sets. That measures performance on new trials from familiar participants, not the
+intended task of generalising to a **new** person. Shared participant and recording
+characteristics can make that result optimistic for the intended use case.
 
 We therefore split by **subject group**: within each fold, no subject appears in more than one
 of {train, validation, test}. All supervised steps (CSP, scaling, CNN normalisation,
@@ -36,7 +35,8 @@ integrity is asserted in code (`OuterFold.assert_disjoint`) and in tests
 ## 3. Dataset and runs
 
 PhysioNet **EEG Motor Movement/Imagery Dataset** (EEGMMIDB / EEGBCI), loaded through MNE.
-64 EEG channels, 160 Hz. We use the **imagined left-vs-right fist** runs **4, 8, 12** only.
+The protocol requires 64 EEG channels and 160 Hz sampling. We use the **imagined left-vs-right
+fist** runs **4, 8, 12** only.
 Runs 6, 10, 14 (hands-vs-feet) are deliberately excluded — their `T1`/`T2` annotations mean
 something different, and mixing them would corrupt the labels (the code refuses run numbers in
 `{6, 10, 14}`).
@@ -57,9 +57,9 @@ For runs 4/8/12:
 
 1. Standardise EEGBCI channel names; attach the standard 10-05 montage.
 2. **Common-average reference** (neutral, subject-agnostic).
-3. **Band-pass 7–30 Hz** — the mu (~8–13 Hz) and beta (~13–30 Hz) sensorimotor rhythms whose
-   event-related desynchronisation encodes motor imagery. FIR, zero-phase, filtering skips
-   annotated edges.
+3. **Band-pass 7–30 Hz** — retains the mu (~8–13 Hz) and beta (~13–30 Hz) frequency bands.
+   FIR, zero-phase; filtering skips annotated edges. This choice does not establish a
+   physiological interpretation of the learned features.
 4. Epoch `T1`/`T2` over **1.0–4.0 s post-cue** (avoids the cue transient, captures sustained
    imagery). No baseline correction (CAR + narrow band already remove drifts).
 
@@ -80,8 +80,9 @@ aggregate. Per-fold scores, configuration means, failures, and hashes are saved.
 
 `CompactEEGNet` (`src/eeg_benchmark/models/compact_eegnet.py`): temporal conv → depthwise
 spatial conv over channels → ELU → pooling → dropout → separable conv → pooling → global
-average pool → 2-class linear head. Inspired by EEGNet but a reduced-width variant (**< 100k
-parameters**, printed and saved). Input normalisation uses **training-subject** statistics,
+average pool → 2-class linear head. Inspired by [EEGNet](https://arxiv.org/abs/1611.08024),
+but not an exact reproduction; the published full-V1 model has **2,162 trainable parameters**.
+Input normalisation uses **training-subject** statistics,
 saved with the checkpoint. Training has two explicit phases: early stopping on one grouped
 validation holdout selects a zero-based `best_epoch`; then a freshly initialised model and
 optimizer are trained on train + validation for exactly `best_epoch + 1` epochs. The final
@@ -101,6 +102,14 @@ Multiple seeds are run in the full profile. Runs on CPU, CUDA, or Apple MPS.
 Metrics (balanced accuracy, macro-F1, ROC-AUC, class recalls, confusion) are computed at
 epoch and **per-subject** level. The headline comparison is the **paired per-subject
 difference** with a subject-level bootstrap CI. Individual CNN seeds are preserved.
+
+For headline results, metrics are averaged across CNN seeds within each subject before
+averaging across subjects. Every subject has equal weight. This is an average of model
+scores, not an ensemble of their predictions. Balanced accuracy is
+`(recall_left + recall_right) / 2`; its expected chance level is 50% for this binary task.
+The bootstrap resamples subject-level scores or paired differences. It is conditional on
+the recorded fits and splits; it does not include independent-dataset or full retraining
+uncertainty.
 
 ## 9. Channel-drop robustness
 
@@ -186,11 +195,11 @@ or training defines a new experiment rather than a correction to V1.
 
 ## 15. Results
 
-Full-profile results write to `results/` and `reports/`. The active smoke profile writes to
-`results_smoke_active/` and `reports_smoke_active/`; the legacy `results_smoke/` snapshot is
-preserved but is not evidence for the hardened protocol. Reports are generated **only from
-saved result files**—no numbers are hard-coded. On 2026-07-20 the hardened active smoke pipeline
-completed all stages and produced 10 figures; this proves operability, not scientific validity.
+Full-profile results write to `results/` and `reports/`. The smoke profile writes to
+`results_smoke_active/` and `reports_smoke_active/`. These generated directories are excluded
+from Git. The reporting code reads saved result files rather than hard-coded benchmark
+values. The committed full-V1 bundle is the scientific evidence; small smoke runs only
+verify pipeline execution.
 
 ### Reviewed full V1 result
 
@@ -207,6 +216,13 @@ Because this interval is entirely above zero, the result supports a modest avera
 under this fixed protocol. Effects were heterogeneous: CNN performed better for 68 subjects, CSP
 for 37, and the models tied for 1. This is evidence within this dataset and protocol, not
 universal model superiority.
+
+CNN recall averaged 63.3% for left imagery and 60.0% for right imagery, using the same
+seed-then-subject averaging. Median subject balanced accuracy was 59.1%; 12 of 106 subjects
+had seed-averaged scores below 50%. These are descriptive summaries of
+[`subject_metrics.csv`](../artifacts/full_v1/results/subject_metrics.csv), not separate
+significance tests for individual subjects. Classification remained modest and unreliable
+for some participants.
 
 At 50% random channel removal, mean balanced accuracy fell to 0.530 for CNN and 0.524 for CSP,
 so the advantage narrowed substantially under severe channel loss. CNN explanation stability
@@ -265,9 +281,10 @@ Key artifacts: `predictions.csv`, `fold_metrics.csv`, `subject_metrics.csv`,
   across CNN seeds.
 - CNN latency was measured on a T4 GPU and CSP latency on CPU; those values describe the tested
   deployments, not intrinsic model-family speed.
-- On Apple Silicon, NumPy 2.1.x + Accelerate BLAS emits spurious "encountered in matmul"
-  RuntimeWarnings during `matmul`; verified harmless (well-conditioned inputs, correct
-  results) and filtered in `pyproject.toml`. Does not occur on Linux/OpenBLAS (CI).
+- Earlier local Apple Silicon checks with NumPy 2.1.x / Accelerate emitted
+  "encountered in matmul" RuntimeWarnings despite finite audited outputs. These warnings
+  are filtered in the test settings in `pyproject.toml`. This is not a guarantee that every
+  matrix warning is harmless; inspect fitting failures and non-finite outputs on a new run.
 
 ## 18. Ethical and scientific interpretation
 
@@ -293,4 +310,15 @@ Python 3.11/3.12.
 
 ## License & citation
 
-MIT (`LICENSE`). See `CITATION.cff`. Dataset: Schalk et al., BCI2000 / PhysioNet EEGMMIDB.
+Code is released under [MIT](../LICENSE). See [CITATION.cff](../CITATION.cff) for project
+citation metadata. Dataset terms and required acknowledgments are provided by PhysioNet.
+
+## References
+
+- Schalk, G. (2009). [EEG Motor Movement/Imagery Dataset, version 1.0.0](https://physionet.org/content/eegmmidb/1.0.0/).
+  PhysioNet. DOI: [10.13026/C28G6P](https://doi.org/10.13026/C28G6P).
+- Schalk et al. (2004). [BCI2000: a general-purpose brain-computer interface (BCI) system](https://pubmed.ncbi.nlm.nih.gov/15188875/).
+- Pollard et al. (2026). [PhysioNet as a global platform for biomedical research](https://doi.org/10.1038/s44360-026-00096-z).
+  Platform reference requested by the dataset page.
+- Lawhern et al. (2018). [EEGNet: A Compact Convolutional Network for EEG-based Brain-Computer Interfaces](https://arxiv.org/abs/1611.08024).
+  Architecture inspiration, not a claim of exact reproduction.

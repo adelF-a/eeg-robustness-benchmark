@@ -1,4 +1,4 @@
-"""Config identity + profile isolation (step 3).
+"""Configuration identity and profile isolation.
 
 Two configurations that happen to share a name (or an output directory) must not mix:
 artifacts are stamped with a config hash, and stages reject incompatible artifacts with a

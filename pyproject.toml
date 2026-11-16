@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "eeg-benchmark"
 version = "0.1.0"
-description = "Explainable and robust EEG motor-imagery classification benchmark (CSP+LogReg vs compact EEGNet)."
+description = "EEG motor-imagery classification benchmark: unseen-subject accuracy, channel-loss robustness, and explanation stability."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -53,6 +53,6 @@ filterwarnings = [
     "ignore::UserWarning",
     # Spurious floating-point warnings from NumPy 2.1.x matmul on Apple Accelerate BLAS.
     # Verified harmless: plain well-conditioned float32 A@B triggers it; results are correct.
-    # Does not occur on CI (Linux/OpenBLAS). See README "Limitations".
+    # Does not occur on CI (Linux/OpenBLAS). See docs/METHODS.md "Limitations".
     "ignore:.*encountered in matmul:RuntimeWarning",
 ]

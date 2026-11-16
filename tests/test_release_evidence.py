@@ -79,3 +79,19 @@ def test_full_v1_headline_metric_and_corrected_report_wording():
     assert "CI lies entirely above 0" in report
     assert "different devices/backends" in report
     assert "Full-profile outputs require scientific review" not in report
+
+
+def test_readme_classification_summary_matches_saved_subject_metrics():
+    metrics = pd.read_csv(RESULTS / "subject_metrics.csv")
+    cnn = metrics.loc[metrics["model"] == "cnn"].groupby("subject").mean(numeric_only=True)
+    csp = metrics.loc[metrics["model"] == "csp"].groupby("subject").mean(numeric_only=True)
+    readme = " ".join((ROOT / "README.md").read_text().split())
+
+    assert f"**{len(cnn)} participants, {int(cnn['n_epochs'].sum()):,} trials" in readme
+    for label, scores in [("Compact EEGNet-like CNN", cnn), ("CSP + logistic regression", csp)]:
+        assert f"| {label} | {scores['balanced_accuracy'].mean():.1%} |" in readme
+    assert f"**{cnn['recall_left'].mean():.1%} for left imagery**" in readme
+    assert f"**{cnn['recall_right'].mean():.1%} for right imagery**" in readme
+    assert f"median CNN balanced accuracy was **{cnn['balanced_accuracy'].median():.1%}**" in readme
+    below_chance = int((cnn["balanced_accuracy"] < 0.5).sum())
+    assert f"**{below_chance} of {len(cnn)} participants**" in readme

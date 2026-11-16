@@ -22,9 +22,18 @@ ROOT = Path(__file__).resolve().parents[1]
         "full_run.log",
         "eeg-benchmark-kaggle.zip",
         ".claude/settings.local.json",
+        ".codex/settings.json",
+        "CLAUDE_HANDOFF.md",
+        "CODEX_HANDOFF.md",
+        "PLAN.md",
+        "LEARNING_GUIDE.md",
+        "docs/DEVELOPMENT.md",
+        "scripts/explore_data.py",
+        "scripts/make_linkedin_scientific_figure.py",
+        "assets/social/eeg-benchmark-linkedin.png",
     ],
 )
-def test_generated_run_artifact_is_ignored(path):
+def test_generated_runs_and_personal_files_are_ignored(path):
     subprocess.run(
         ["git", "check-ignore", "--no-index", "--quiet", path],
         cwd=ROOT,
@@ -38,6 +47,10 @@ def test_generated_run_artifact_is_ignored(path):
         "artifacts/full_v1/README.md",
         "artifacts/full_v1/subject_metrics.csv",
         "src/eeg_benchmark/reporting/report.py",
+        "README.md",
+        "docs/METHODS.md",
+        "configs/full.yaml",
+        "tests/test_model_selection_protocol.py",
     ],
 )
 def test_curated_evidence_and_source_remain_trackable(path):

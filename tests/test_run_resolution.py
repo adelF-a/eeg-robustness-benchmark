@@ -1,4 +1,4 @@
-"""Strict run resolution and explicit run->EDF association (step 1).
+"""Strict run resolution and explicit run-to-EDF association.
 
 These tests guard against the previous positional-`zip` bug where a filtered run list
 was paired against an unfiltered EDF list, silently mislabelling data (e.g. run-6

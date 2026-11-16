@@ -1,6 +1,6 @@
 """Validation is authoritative; exclusions always carry machine-readable reasons;
-unexpected post-validation preprocessing failures fail loudly with subject/run context
-(step 2). No network: MNE readers are monkeypatched.
+unexpected post-validation preprocessing failures fail loudly with subject/run context.
+No network: MNE readers are monkeypatched.
 """
 
 from __future__ import annotations

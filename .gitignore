@@ -20,7 +20,13 @@ data/processed/*
 /CLAUDE_HANDOFF.md
 /CODEX_HANDOFF.md
 /PLAN.md
+
+# Personal study notes and publishing assets
 /LEARNING_GUIDE.md
+/docs/DEVELOPMENT.md
+/scripts/explore_data.py
+/scripts/make_linkedin_scientific_figure.py
+/assets/social/
 
 # Python
 __pycache__/

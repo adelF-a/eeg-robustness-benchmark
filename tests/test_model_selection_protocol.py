@@ -1,6 +1,6 @@
-"""Step 4: genuine inner CV for CSP, and CNN validation-holdout + fresh train+val refit.
+"""CSP inner CV and CNN validation-holdout selection with fresh train+val refitting.
 
-All synthetic/offline. These prove the scientific protocol, not just that code runs.
+Synthetic, offline regressions for model selection and final fitting.
 """
 
 from __future__ import annotations
