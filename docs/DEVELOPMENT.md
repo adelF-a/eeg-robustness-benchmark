@@ -1,4 +1,9 @@
-# PLAN — Explainable & Robust EEG Motor-Imagery Benchmark
+# Development and Verification Record
+
+[Project overview](../README.md) · [Methods](METHODS.md) · [Full V1 evidence](../artifacts/full_v1/README.md)
+
+This record preserves the completed implementation milestones, scientific decisions, and
+verification history. Dates below refer to those original runs, not a fresh execution.
 
 Research question: *Does a compact neural EEG classifier outperform a CSP + logistic-regression
 baseline on previously unseen subjects, and how robust and explainable are both models when EEG
@@ -11,7 +16,7 @@ Task: imagined left fist (T1) vs imagined right fist (T2). 64 channels, 160 Hz.
 - [x] Inspect repository (empty git repo, no commits)
 - [x] Identify tooling: Python 3.13 (miniforge), pip; Apple Silicon (MPS available after torch install)
 - [x] Select dependency versions (numpy<2.3, torch>=2.2, mne>=1.6, sklearn>=1.3)
-- [x] Create PLAN.md
+- [x] Record the implementation plan and verification history
 
 ## Phase 2 — Scaffold
 - [x] Package structure `src/eeg_benchmark/`

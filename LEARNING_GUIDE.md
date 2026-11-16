@@ -5,8 +5,11 @@ follows one layer of the pipeline in the order data actually flows through it. F
 *Read* (files, with the concept), *Why it's built this way*, *Do* (a hands-on command or test),
 and *Checkpoint* questions to confirm you understood it before moving on.
 
-Setup once (already done in this repo): `source .venv/bin/activate`. Everything below uses the
-fast **smoke** profile and the already-downloaded subjects 1–5, so no day waits on a big run.
+Start with the [installation instructions](README.md#quickstart). The conceptual sections,
+source code, and committed full-V1 results can be studied offline. The exercises use the
+smaller **smoke** profile with subjects 1–5: install dependencies and download that data once
+while online, then run the exercises locally. Raw EEG and a virtual environment are not
+included in a fresh clone. Execution time depends on your hardware.
 
 The single best mental model to hold the whole week:
 
@@ -23,8 +26,8 @@ exposed by `src/eeg_benchmark/cli.py`. When lost, start at `pipeline.run_all` an
 ## Day 1 — The question, and the one idea that shapes everything
 
 **Read (20 min)**
-- `README.md` §1–2 and §8 — the research question and *why random epoch splitting leaks subjects*.
-- `PLAN.md` — the "Key scientific decisions" and "Actual verified outcomes" sections.
+- [Methods, sections 1–2 and 8](docs/METHODS.md) — the research question and why random epoch splitting leaks subjects.
+- [Development record](docs/DEVELOPMENT.md) — the "Key scientific decisions" and "Actual verified outcomes" sections.
 - `src/eeg_benchmark/config.py` — skim the dataclasses; note that **every experimental knob is
   in YAML**, not hidden in code. Open `configs/smoke.yaml` beside it.
 
@@ -213,16 +216,16 @@ confound a cross-seed stability estimate? What would you change for a 20-subject
   supports inferential interpretation.
 - Read `tests/conftest.py` to see how the synthetic fixtures make the whole pipeline testable
   without any download — a good template for your own experiments.
-- Open questions and verification status are listed in `PLAN.md`.
+- Open questions and verification status are listed in [the development record](docs/DEVELOPMENT.md).
 
 ---
 
 # Appendix A — Run the whole pipeline yourself, stage by stage (smoke set)
 
 This is the hands-on companion to the week: run each stage **in order** on the 5-subject smoke
-set (subjects 1–5 are already downloaded) and *look at the file each stage produces*. That loop —
+set (download subjects 1–5 in step 0 below) and *look at the file each stage produces*. That loop —
 **run a stage → inspect its output → read the code that made it** — is the fastest way to see how
-an ML project is assembled. Every stage here is only seconds on the smoke set.
+an ML project is assembled. Runtime varies by stage and hardware.
 
 First, once per terminal:
 ```bash
@@ -246,7 +249,7 @@ python -m eeg_benchmark.cli run-all --config configs/smoke.yaml
 
 ## Stage-by-stage — what each command does and what to look at
 
-**0. Get the data** — download EDFs (skips any already present, so this is instant for 1–5).
+**0. Get the data** — download EDFs (requires network access once; cached files are reused).
 ```bash
 python -m eeg_benchmark.cli download --config configs/smoke.yaml
 ls data/raw/MNE-eegbci-data/files/eegmmidb/1.0.0/S001/       # the raw .edf files

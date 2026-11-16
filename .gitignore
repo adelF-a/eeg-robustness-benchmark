@@ -16,6 +16,10 @@ data/processed/*
 *.log
 /eeg-benchmark-kaggle.zip
 /.claude/
+/.codex/
+/CLAUDE_HANDOFF.md
+/CODEX_HANDOFF.md
+/PLAN.md
 
 # Python
 __pycache__/
