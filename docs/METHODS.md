@@ -1,6 +1,6 @@
 # EEG Motor-Imagery Robustness Benchmark — Methods and Reproduction
 
-[Back to the project overview](../README.md) · [Learning guide](../LEARNING_GUIDE.md)
+[Back to the project overview](../README.md)
 
 Run the commands in this document from the repository root.
 

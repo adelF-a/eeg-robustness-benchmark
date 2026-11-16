@@ -20,6 +20,7 @@ data/processed/*
 /CLAUDE_HANDOFF.md
 /CODEX_HANDOFF.md
 /PLAN.md
+/LEARNING_GUIDE.md
 
 # Python
 __pycache__/

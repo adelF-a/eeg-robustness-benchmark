@@ -62,7 +62,7 @@ Task: imagined left fist (T1) vs imagined right fist (T2). 64 channels, 160 Hz.
 - [x] Hardened real-data smoke experiment
 - [x] Final package build
 - [x] Verify active-smoke artifacts and generated report
-- [x] Final README / learning-guide audit
+- [x] Final documentation audit
 - [x] Full V1 completeness, identity, finite-value, fold/seed-coverage, and report audit
 
 ## Actual verified outcomes

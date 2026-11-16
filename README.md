@@ -13,8 +13,7 @@ analysis. It uses PhysioNet EEGMMIDB through MNE. This is a research benchmark; 
 claims are made.
 
 [Results and evidence](artifacts/full_v1/README.md) ·
-[Methods and reproduction](docs/METHODS.md) ·
-[Offline learning guide](LEARNING_GUIDE.md)
+[Methods and reproduction](docs/METHODS.md)
 
 ## Results at a glance
 
@@ -88,8 +87,8 @@ python -m eeg_benchmark.cli run-all --config configs/smoke.yaml
 
 The first command downloads data for five subjects. Outputs go to `results_smoke_active/`
 and `reports_smoke_active/`. These smoke results verify execution; they are too small for
-scientific conclusions. To study the project without running training, begin with the
-[seven-day learning guide](LEARNING_GUIDE.md) and the committed full-V1 evidence.
+scientific conclusions. To review the project without running training, see the
+[methods](docs/METHODS.md) and the [committed full-V1 evidence](artifacts/full_v1/README.md).
 
 For a full experiment:
 
@@ -110,7 +109,6 @@ documents individual stages, cached data, output paths, and reproduction metadat
 | [`configs/`](configs/) | Smoke and full experiment configurations |
 | [`tests/`](tests/) | Offline tests for splits, fitting, explanations, reporting, and evidence integrity |
 | [`artifacts/full_v1/`](artifacts/full_v1/) | Reviewed result tables, figures, saved splits, and provenance |
-| [`LEARNING_GUIDE.md`](LEARNING_GUIDE.md) | Concepts, code walkthroughs, exercises, and checkpoints |
 | [`docs/METHODS.md`](docs/METHODS.md) | Full scientific method and execution instructions |
 | [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Development milestones, scientific decisions, and verification history |
 
